@@ -13,8 +13,6 @@ def CloseConnectionToDb():
         curs.close()
         conn.close()
 
-
-
 def CreateTable(tableName, fields):
     command = "CREATE TABLE IF NOT EXISTS" + tableName + "("
     for x in fields:
