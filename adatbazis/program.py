@@ -7,6 +7,7 @@ root = tk.Tk()
 root.title("Adatbázis kezelő - Nagy István")
 conn = None
 curs = None
+table = None
 
 dbman = DbManager(conn, curs)
 dbman.ConnectToDb(db)
@@ -19,14 +20,7 @@ def AppExit(root):
 
 def TableChange(event):
     print("Changed!")
-    names = [description[0] for description in dbman.curs.description]
-    table = ttk.Treeview(root, columns=names, show="headings")
-    table.grid(column=0, columnspan=2, row=2)
-    global Current_tableName
-    Current_tableName=Current_tableName.get()
-    for col in names:
-        table.heading(col, text=col)
-    dbman.WriteTableContent(table, Current_tableName)
+    dbman.WriteTableContent(root, ttk, table, Current_tableName.get())
 
 frm = ttk.Frame(root, padding=10)
 frm.grid()
@@ -38,11 +32,12 @@ tableNames = dbman.curs.fetchall()
 Current_tableName = tk.StringVar()
 combobox = ttk.Combobox(frm, textvariable=Current_tableName)
 combobox["values"] = tableNames
+combobox.current(0)
 
 combobox.bind("<<ComboboxSelected>>", TableChange)
 combobox.grid(column=1, row=1)
-
-
+print(Current_tableName)
+dbman.WriteTableContent(root, ttk, table, Current_tableName.get())
 
 
 ttk.Button(frm, text="Kilépés", command=lambda: AppExit(root)).grid(column=1, row=0)
