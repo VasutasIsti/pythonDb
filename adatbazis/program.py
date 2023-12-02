@@ -1,3 +1,8 @@
+# DEPRECATED - Do Not Use
+# Ez egy korai változat, amit egyszerűbb volt nulláról újra írni.
+# Referenciaként megmaradt.
+# A dbManager-el már nem kompatibilis (2023.12.02)
+
 import tkinter as tk
 from tkinter import ttk
 from dbManager import *

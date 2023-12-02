@@ -1,7 +1,7 @@
 import sqlite3
 
 class DbManager:
-    def __init__(self, conn, curs):
+    def __init__(self, conn=None, curs=None):
         self.conn = conn
         self.curs = curs
 
@@ -34,31 +34,11 @@ class DbManager:
         command += ") DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci"
         print(command)
         
-    def WriteTableContent(self, root, ttk, table, dbTable:str):
+    def WriteTableContent(self, table, dataList):
         """Writes table content of the specified table. It only works on tables, which column count is between 2 and 10."""
         
-        comm = "SELECT * FROM " + dbTable
-        data = self.curs.execute(comm)
-        
-        # data=cursor.execute('''SELECT * FROM table_name''')
-
-        names = []
-
-        for column in data.description:
-            names.append(column[0])
-        
-        table = ttk.Treeview(root, columns=names, show="headings")
-        table.grid(column=0, columnspan=2, row=2)
-        
-        for col in names:
-            table.heading(col, text=col)
-
-        print("exec done")
-        dataList = self.curs.fetchall()
         print("fetch done")
-        table.delete(*table.get_children())
-        root.update()
-        root.update_idletasks()
+        
         for data in dataList:
             match(len(data)):
                 case 1:
