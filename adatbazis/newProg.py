@@ -10,21 +10,25 @@ frame.grid()
 currentComboboxValue = tk.StringVar()
 dbman = DbManager()
 dbman.ConnectToDb(db)
+table = ttk.Treeview(frame)
 
 def AppExit():
     dbman.CloseConnectionToDb()
     root.destroy()
 
 def FirstTableNames():
+    print("Getting table column names")
     comm = "SELECT * FROM " + currentComboboxValue.get()
     data = dbman.curs.execute(comm)
     names = []
     for column in data.description:
         names.append(column[0])
+    print("done")
     return list[str](names)
 
-def SwitchTable(table):
+def SwitchTable():
     print("Switching tables")
+    global table
     if type(table) is not type(None):
         for i in table.get_children():
             table.delete(i)
@@ -40,7 +44,7 @@ def SwitchTable(table):
     dbman.WriteTableContent(table, dataList)
 
 def ComboboxChanged(event):
-    SwitchTable(table)
+    SwitchTable()
 
 # ==================================================================
 # Dinamikusan feltöltött, adatbázisban megtalálható táblák
@@ -60,8 +64,12 @@ ttk.Label(frame, text="Fejlesztés alatt...", foreground="#ff0000", font="Arial 
 ttk.Button(frame, text="Kilépés", command=lambda: AppExit()).grid(column=1, row=0)
 ttk.Label(frame, text="Tábla:", justify="right", font="Arial 12 bold", padding=10).grid(column=0, row=1)
 combobox.grid(column=1, row=1)
-
-table = ttk.Treeview(frame, columns=FirstTableNames(), show="headings").grid(column=0, columnspan=2, row=2)
+table = ttk.Treeview(frame, columns=FirstTableNames(), show="headings")
+table.grid(column=0, columnspan=2, row=2)
+comm = "SELECT * FROM " + currentComboboxValue.get() + ";"
+dbman.curs.execute(comm)
+dataList = dbman.curs.fetchall()
+dbman.WriteTableContent(table, dataList)
 
 # root.protocol("WM_DELETE_WINDOW", AppExit())
 root.mainloop()
