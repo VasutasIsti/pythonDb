@@ -59,17 +59,32 @@ combobox.bind("<<ComboboxSelected>>", ComboboxChanged)
 
 # ==================================================================
 
+# ==================================================================
+# 
+# ==================================================================
 
 ttk.Label(frame, text="Fejlesztés alatt...", foreground="#ff0000", font="Arial 18 bold", padding=10).grid(column=0, row=0)
-ttk.Button(frame, text="Kilépés", command=lambda: AppExit()).grid(column=1, row=0)
+ttk.Button(frame, text="Kilépés", command=AppExit).grid(column=1, row=0)
 ttk.Label(frame, text="Tábla:", justify="right", font="Arial 12 bold", padding=10).grid(column=0, row=1)
 combobox.grid(column=1, row=1)
 table = ttk.Treeview(frame, columns=FirstTableNames(), show="headings")
-table.grid(column=0, columnspan=2, row=2)
-comm = "SELECT * FROM " + currentComboboxValue.get() + ";"
-dbman.curs.execute(comm)
-dataList = dbman.curs.fetchall()
-dbman.WriteTableContent(table, dataList)
+table.grid(column=0, columnspan=2, row=2, pady=10)
+SwitchTable()
 
-# root.protocol("WM_DELETE_WINDOW", AppExit())
+# ==================================================================
+# Szerkesztő gombok
+# ==================================================================
+
+buttonFrame = ttk.Frame(frame, borderwidth=10, relief="solid", padding=10)
+buttonFrame.grid(column=0, columnspan=2, row=3)
+buttonFrame.grid()
+ttk.Button(buttonFrame, text="Beszúrás").grid(column=0, row=0)
+ttk.Button(buttonFrame, text="Szerkesztés").grid(column=1, row=0)
+ttk.Button(buttonFrame, text="Törlés").grid(column=2, row=0)
+
+
+# ==================================================================
+
+
+root.protocol("WM_DELETE_WINDOW", AppExit)
 root.mainloop()
