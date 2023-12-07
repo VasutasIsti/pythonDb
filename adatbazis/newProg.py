@@ -72,10 +72,12 @@ table.grid(column=0, columnspan=2, row=2, pady=10)
 SwitchTable()
 
 # ==================================================================
+
+# ==================================================================
 # Szerkesztő gombok
 # ==================================================================
 
-buttonFrame = ttk.Frame(frame, borderwidth=10, relief="solid", padding=10)
+buttonFrame = ttk.Frame(frame, borderwidth=10, relief="solid")
 buttonFrame.grid(column=0, columnspan=2, row=3)
 buttonFrame.grid()
 ttk.Button(buttonFrame, text="Beszúrás").grid(column=0, row=0)
