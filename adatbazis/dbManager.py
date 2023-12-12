@@ -33,6 +33,9 @@ class DbManager:
         command = command[:-2]
         command += ") DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci"
         print(command)
+
+    def InsertRecord(self, tableName:str):
+        pass
         
     def WriteTableContent(self, table, dataList):
         """Writes table content of the specified table. It only works on tables, which column count is between 2 and 10."""
@@ -61,5 +64,5 @@ class DbManager:
                     table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]))
                 case 10:
                     table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]))
-                case default:
+                case _:
                     print("HIBA! Túl nagy adatbázis rekord.")
