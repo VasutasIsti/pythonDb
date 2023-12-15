@@ -58,13 +58,17 @@ def InsertionWindow():
         iw.protocol("WM_DELETE_WINDOW", lambda: OnIwClose(iw))
         iwf = ttk.Frame(iw, borderwidth=10, relief="flat", padding=10)
         fields = TableColumnNames()
-        data = []
-        for field in fields:
-            ttk.Label(iwf, text=field+":")
+        datas = 0
+        data = [None]*10
+        for x in range(len(fields)):
+            label = ttk.Label(iwf, text=fields[x]+":")
+            label.grid(column=0, row=x)
             value = tk.StringVar()
-            ttk.Entry(iwf, textvariable=value)
-            data.append(value)
-
+            entry = ttk.Entry(iwf, textvariable=value)
+            entry.grid(column=1, row=x)
+            data[x] = [label, value, entry]
+            datas += 1
+         
 
 def OnIwClose(iw:tk.Tk):
     global iwOpen
