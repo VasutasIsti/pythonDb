@@ -34,8 +34,8 @@ class DbManager:
         command += ") DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci"
         print(command)
 
-    def InsertRecord(self, tableName:str):
-        pass
+    def InsertRecord(self, command:str):
+        self.curs.execute(command)
         
     def WriteTableContent(self, table, dataList):
         """Writes table content of the specified table. It only works on tables, which column count is between 2 and 10."""
