@@ -1,7 +1,7 @@
 import sqlite3
 
 class DbManager:
-    def __init__(self, conn=None, curs=None):
+    def __init__(self, conn:sqlite3.Connection=None, curs:sqlite3.Connection.cursor=None):
         self.conn = conn
         self.curs = curs
 
@@ -13,6 +13,7 @@ class DbManager:
 
     def CloseConnectionToDb(self):
         """Closes connection to the used database."""
+        self.conn.commit()
         self.curs.close()
         self.conn.close()
         print("Database connection closed.")
@@ -34,7 +35,52 @@ class DbManager:
         command += ") DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci"
         print(command)
 
+    def TableColumnNames(self, tableName:str):
+        """Returns column names of the "tableName" table, as a list of strings."""
+        print("Getting table column names")
+        comm = "SELECT * FROM " + tableName
+        data = self.curs.execute(comm)
+        names = []
+        for column in data.description:
+            names.append(column[0])
+        print("done")
+        return list[str](names)
+
+    def CreateInsertionCommand(self, fields:list, data:list, tableName:str):
+        """Returns the INSERT INTO statement from field names and their respective value"""
+        for i in range(len(data)):
+            if data[i].get() == "":
+                print(f"Hiányzó adat ({fields[i]})")
+                return
+        command = f"INSERT INTO {tableName} ("
+        for field in fields:
+            command += str(field) + ", "
+
+        command = command[:len(command) - 2]
+        command += ") VALUES ("
+        for i in range(len(data)):
+            if data[i] == type(None):
+                break
+            else:
+                try:
+                    number = int(data[i].get())
+                    command += f"{number}, "
+                except ValueError:
+                    command += f"\"{data[i].get()}\", "
+
+        command = command[:len(command) - 2]
+        command += ");"
+        print(f"Command: {command}")
+        return command
+
     def InsertRecord(self, command:str):
+        self.curs.execute(command)
+
+    def CreateDeletionCommand(self, idColumnName:str, id:str, tableName:str):
+        command = f"DELETE FROM {tableName} WHERE {idColumnName}={id};"
+        return command
+
+    def RemoveRecord(self, command:str):
         self.curs.execute(command)
         
     def WriteTableContent(self, table, dataList):
@@ -43,6 +89,7 @@ class DbManager:
         print("fetch done")
         
         for data in dataList:
+            #### Not the most beautiful, but it works... until 10 entries :)
             match(len(data)):
                 case 1:
                     print("HIBA! Túl kicsi adatbázis.")
