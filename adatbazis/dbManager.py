@@ -85,31 +85,5 @@ class DbManager:
         
     def WriteTableContent(self, table, dataList):
         """Writes table content of the specified table. It only works on tables, which column count is between 2 and 10."""
-        
-        print("fetch done")
-        
         for data in dataList:
-            #### Not the most beautiful, but it works... until 10 entries :)
-            match(len(data)):
-                case 1:
-                    print("HIBA! Túl kicsi adatbázis.")
-                case 2:
-                    table.insert("", "end", values=(data[0], data[1]))
-                case 3:
-                    table.insert("", "end", values=(data[0], data[1], data[2]))
-                case 4:
-                    table.insert("", "end", values=(data[0], data[1], data[2], data[3]))
-                case 5:
-                    table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4]))
-                case 6:
-                    table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4], data[5]))
-                case 7:
-                    table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4], data[5], data[6]))
-                case 8:
-                    table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]))
-                case 9:
-                    table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]))
-                case 10:
-                    table.insert("", "end", values=(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9]))
-                case _:
-                    print("HIBA! Túl nagy adatbázis rekord.")
+            table.insert("", "end", values=data)

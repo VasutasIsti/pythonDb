@@ -43,6 +43,7 @@ def SwitchTable():                                                      # Tábla
     for name in names:
         treeview.heading(name, text=name)
     dataList = dbman.curs.fetchall()
+    print("fetch done")
     dbman.WriteTableContent(treeview, dataList)
 
 def OnComboboxChange(event):                                            # Segéd függvény a SwitchTable() meghívásához
