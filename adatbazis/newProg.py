@@ -69,6 +69,7 @@ def OnIwEntryChange(fields:list, data:list, result:tk.StringVar):       # TODO! 
 def OnIwClose(iw:tk.Toplevel):                                                # Beszúrási ablak bezárásának egyedi folyamat.
     global topOpen
     topOpen = False
+    combobox.state(["!disabled"])
     iw.destroy()
 
 def OnIwInsert(iw:tk.Toplevel, fields:list, data:list, tableName:str):        # A Beszúr gomb megnyomásakor lezajló folyamatok.
@@ -80,6 +81,7 @@ def InsertionWindow():                                                  # A Besz
     global topOpen
     if not topOpen:
         topOpen = True
+        combobox.state(["disabled"])
         iw = tk.Toplevel(root)
         iw.title("Rekord hozzáadása")
         iw.protocol("WM_DELETE_WINDOW", lambda: OnIwClose(iw))
@@ -110,6 +112,7 @@ def InsertionWindow():                                                  # A Besz
 def OnDwClose(dw:tk.Toplevel):
     global topOpen
     topOpen = False
+    combobox.state(["!disabled"])
     dw.destroy()
 
 def OnDwDelete(dw:tk.Toplevel, tableName:str, columnName, value):
@@ -121,6 +124,7 @@ def DeletionWindow():                                                   # A Tör
     global topOpen
     if not topOpen:
         topOpen = True
+        combobox.state(["disabled"])
         dw = tk.Toplevel(root)
         dw.title("Rekord Törlése")
         dw.protocol("WM_DELETE_WINDOW", lambda: OnDwClose(dw))
