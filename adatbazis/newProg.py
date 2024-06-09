@@ -3,14 +3,19 @@
 # ==================================================================
 import tkinter as tk
 from tkinter import ttk
+from tkinter import filedialog
 from dbManager import *
 # ==================================================================
 
 # ==================================================================
 # Globális változók, objektumok, illetve alapvető műveletek
 # ==================================================================
-db = "metro.db"
+db = filedialog.askopenfilename()
 root = tk.Tk()
+root.update()
+
+root.deiconify()
+root.lift()
 root.title("Adatbázis kezelő v0.3 - Nagy István")
 root.resizable(0, 0)                                                    # Amíg nem találok megoldást a treeview dinamikus méretezésére, 
                                                                         # addig nem lehet az ablak méretét állítani.
@@ -38,7 +43,7 @@ def SwitchTable():                                                      # Tábla
     if type(treeview) is not type(None):
         for i in treeview.get_children():
             treeview.delete(i)
-    names = dbman.TableColumnNames(currentComboboxValue.get())
+    names = dbman.GetTableColumnNames(currentComboboxValue.get())
     treeview["columns"] = names
     for name in names:
         treeview.heading(name, text=name)
@@ -67,13 +72,13 @@ def OnIwEntryChange(fields:list, data:list, result:tk.StringVar):       # TODO! 
     command += ");"
     result.set(command)
 
-def OnIwClose(iw:tk.Toplevel):                                                # Beszúrási ablak bezárásának egyedi folyamat.
+def OnIwClose(iw:tk.Toplevel):                                          # Beszúrási ablak bezárásának egyedi folyamata.
     global topOpen
     topOpen = False
     combobox.state(["!disabled"])
     iw.destroy()
 
-def OnIwInsert(iw:tk.Toplevel, fields:list, data:list, tableName:str):        # A Beszúr gomb megnyomásakor lezajló folyamatok.
+def OnIwInsert(iw:tk.Toplevel, fields:list, data:list, tableName:str):  # A Beszúr gomb megnyomásakor lezajló folyamatok.
     dbman.InsertRecord(dbman.CreateInsertionCommand(fields, data, tableName))
     SwitchTable()
     OnIwClose(iw)
@@ -88,7 +93,7 @@ def InsertionWindow():                                                  # A Besz
         iw.protocol("WM_DELETE_WINDOW", lambda: OnIwClose(iw))
         iwf = ttk.Frame(iw, borderwidth=10, relief="flat", padding=10)
         iwf.grid()
-        fields = dbman.TableColumnNames(currentComboboxValue.get())
+        fields = dbman.GetTableColumnNames(currentComboboxValue.get())
         dataN = 0
         data = []
         # print(data)
@@ -110,13 +115,13 @@ def InsertionWindow():                                                  # A Besz
         # result.state(["readonly"])
         # result.grid(column=0, columnspan=6, row=datas)
 
-def OnDwClose(dw:tk.Toplevel):
+def OnDwClose(dw:tk.Toplevel):                                          # Törlési ablak bezárásának egyedi folyamata.
     global topOpen
     topOpen = False
     combobox.state(["!disabled"])
     dw.destroy()
 
-def OnDwDelete(dw:tk.Toplevel, tableName:str, columnName, value):
+def OnDwDelete(dw:tk.Toplevel, tableName:str, columnName, value):       # A Törlés gomb megnyomásakor lezajló folyamatok.
     dbman.RemoveRecord(dbman.CreateDeletionCommand(columnName, value, tableName))
     SwitchTable()
     OnDwClose(dw)
@@ -160,7 +165,7 @@ ttk.Label(frame, text="Tábla:", font="Arial 12 bold", padding=10).grid(column=0
 combobox.grid(column=1, row=2)
 style = ttk.Style()
 style.theme_use("clam")
-treeview = ttk.Treeview(frame, columns=dbman.TableColumnNames(currentComboboxValue.get()), show="headings")
+treeview = ttk.Treeview(frame, columns=dbman.GetTableColumnNames(currentComboboxValue.get()), show="headings")
 treeview.grid(column=0, columnspan=2, row=3, pady=10, sticky="news")
 verticalScrollbar = ttk.Scrollbar(frame, orient="vertical", command=treeview.yview, style="Vertical.TScrollbar")
 verticalScrollbar.grid(column=2, row=3, sticky="news", pady=10)

@@ -35,7 +35,7 @@ class DbManager:
         command += ") DEFAULT CHARSET=utf8 COLLATE=utf8_hungarian_ci"
         print(command)
 
-    def TableColumnNames(self, tableName:str):
+    def GetTableColumnNames(self, tableName:str):
         """Returns column names of the "tableName" table, as a list of strings."""
         print("Getting table column names")
         comm = "SELECT * FROM " + tableName
